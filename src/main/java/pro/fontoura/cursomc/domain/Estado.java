@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package pro.fontoura.cursomc.domain;
 
 import java.io.Serializable;
@@ -9,78 +12,81 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
+/**
+ * @author dalmerfontoura
+ *
+ */
 @Entity
-public class Categoria implements Serializable {
+public class Estado implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	@Column(length = 80, unique = true, nullable = false)
 	private String nome;
+	@OneToMany(mappedBy = "estado")
+	private List<Cidade> cidades = new ArrayList<Cidade>();
 
-	@JsonManagedReference
-	@ManyToMany(mappedBy = "categorias")
-	private List<Produto> produtos = new ArrayList<Produto>();
-
-	public Categoria() {
-
+	/**
+	 * 
+	 */
+	public Estado() {
 	}
 
 	/**
-	 * @param id
-	 * @param nome
+	 * @param id   Identificador
+	 * @param nome Nome do Estado
 	 */
-	public Categoria(Integer id, String nome) {
+	public Estado(Integer id, String nome) {
 		super();
 		this.id = id;
 		this.nome = nome;
 	}
 
 	/**
-	 * @return
+	 * @return the id
 	 */
 	public Integer getId() {
 		return id;
 	}
 
 	/**
-	 * @param id
+	 * @param id the id to set
 	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
 	/**
-	 * @return
+	 * @return the nome
 	 */
 	public String getNome() {
 		return nome;
 	}
 
 	/**
-	 * @param nome
+	 * @param nome the nome to set
 	 */
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
 	/**
-	 * @return
+	 * @return the cidades
 	 */
-	public List<Produto> getProdutos() {
-		return produtos;
+	public List<Cidade> getCidades() {
+		return cidades;
 	}
 
 	/**
-	 * @param produtos
+	 * @param cidades the cidades to set
 	 */
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
+	public void setCidades(List<Cidade> cidades) {
+		this.cidades = cidades;
 	}
 
 	/*
@@ -107,9 +113,9 @@ public class Categoria implements Serializable {
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof Categoria))
+		if (!(obj instanceof Estado))
 			return false;
-		Categoria other = (Categoria) obj;
+		Estado other = (Estado) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
