@@ -9,80 +9,112 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 @Entity
-public class Categoria implements Serializable {
+public class Produto implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	@Column(length = 80, unique = true, nullable = false)
 	private String nome;
+	@Column(precision=2, scale=2)
+	private Double preco;
 	
-	@ManyToMany(mappedBy="categorias")
-	private List<Produto> produtos = new ArrayList<Produto>();
-
-	public Categoria() {
-
+	@ManyToMany
+	@JoinTable(name="produto_categoria", 
+		joinColumns= @JoinColumn(name="produto_id"),
+		inverseJoinColumns = @JoinColumn(name="categoria_id")
+	)
+	private List<Categoria> categorias = new ArrayList<Categoria>();
+	
+	
+	public Produto() {
 	}
+
 
 	/**
 	 * @param id
 	 * @param nome
+	 * @param preco
 	 */
-	public Categoria(Integer id, String nome) {
+	public Produto(Integer id, String nome, Double preco) {
 		super();
 		this.id = id;
 		this.nome = nome;
+		this.preco = preco;
 	}
 
+
 	/**
-	 * @return
+	 * @return the id
 	 */
 	public Integer getId() {
 		return id;
 	}
 
+
 	/**
-	 * @param id
+	 * @param id the id to set
 	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
+
 	/**
-	 * @return
+	 * @return the nome
 	 */
 	public String getNome() {
 		return nome;
 	}
 
+
 	/**
-	 * @param nome
+	 * @param nome the nome to set
 	 */
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
-	/**
-	 * @return
-	 */
-	public List<Produto> getProdutos() {
-		return produtos;
-	}
 
 	/**
-	 * @param produtos
+	 * @return the preco
 	 */
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
+	public Double getPreco() {
+		return preco;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+
+	/**
+	 * @param preco the preco to set
+	 */
+	public void setPreco(Double preco) {
+		this.preco = preco;
+	}
+
+
+	/**
+	 * @return the categorias
+	 */
+	public List<Categoria> getCategorias() {
+		return categorias;
+	}
+
+
+	/**
+	 * @param categorias the categorias to set
+	 */
+	public void setCategorias(List<Categoria> categorias) {
+		this.categorias = categorias;
+	}
+
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -93,9 +125,8 @@ public class Categoria implements Serializable {
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -104,9 +135,9 @@ public class Categoria implements Serializable {
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof Categoria))
+		if (!(obj instanceof Produto))
 			return false;
-		Categoria other = (Categoria) obj;
+		Produto other = (Produto) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -114,5 +145,6 @@ public class Categoria implements Serializable {
 			return false;
 		return true;
 	}
-
+	
+	
 }
