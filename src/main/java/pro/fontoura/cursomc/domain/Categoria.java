@@ -2,41 +2,67 @@ package pro.fontoura.cursomc.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Categoria implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+	@Column(length = 80, unique = true, nullable = false)
 	private String nome;
-	
+
 	public Categoria() {
-		// TODO Auto-generated constructor stub
+
 	}
 
+	/**
+	 * @param id
+	 * @param nome
+	 */
 	public Categoria(Integer id, String nome) {
 		super();
 		this.id = id;
 		this.nome = nome;
 	}
 
+	/**
+	 * @return
+	 */
 	public Integer getId() {
 		return id;
 	}
 
+	/**
+	 * @param id
+	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
+	/**
+	 * @return
+	 */
 	public String getNome() {
 		return nome;
 	}
 
+	/**
+	 * @param nome
+	 */
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -47,7 +73,9 @@ public class Categoria implements Serializable {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -67,8 +95,4 @@ public class Categoria implements Serializable {
 		return true;
 	}
 
-	
-	
-	
-	
 }
