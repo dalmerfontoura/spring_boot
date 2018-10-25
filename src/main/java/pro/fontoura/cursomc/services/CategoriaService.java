@@ -7,16 +7,18 @@ import org.springframework.stereotype.Service;
 
 import pro.fontoura.cursomc.domain.Categoria;
 import pro.fontoura.cursomc.repositories.CategoriaRepository;
+import pro.fontoura.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class CategoriaService {
 
 	@Autowired
 	private CategoriaRepository repository;
-	
+
 	public Categoria busca(Integer id) {
 		Optional<Categoria> obj = repository.findById(id);
-		
-		return obj.orElse(null);
+
+		return obj.orElseThrow(() -> new ObjectNotFoundException( id, Categoria.class.getName()));
+
 	}
 }
