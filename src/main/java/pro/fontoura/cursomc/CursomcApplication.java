@@ -1,7 +1,10 @@
 package pro.fontoura.cursomc;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,17 +15,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import pro.fontoura.cursomc.domain.Cidade;
 import pro.fontoura.cursomc.domain.Cliente;
 import pro.fontoura.cursomc.domain.Endereco;
+import pro.fontoura.cursomc.domain.ItemPedido;
 import pro.fontoura.cursomc.domain.Pagamento;
 import pro.fontoura.cursomc.domain.PagamentoComBoleto;
 import pro.fontoura.cursomc.domain.PagamentoComCartao;
 import pro.fontoura.cursomc.domain.Pedido;
+import pro.fontoura.cursomc.domain.Produto;
 import pro.fontoura.cursomc.domain.enuns.EstadoPagamento;
 import pro.fontoura.cursomc.domain.enuns.TipoPessoa;
 import pro.fontoura.cursomc.repositories.CidadeRepository;
 import pro.fontoura.cursomc.repositories.ClienteRepository;
 import pro.fontoura.cursomc.repositories.EnderecoRepository;
+import pro.fontoura.cursomc.repositories.ItemPedidoRepository;
 import pro.fontoura.cursomc.repositories.PagamentoRepository;
 import pro.fontoura.cursomc.repositories.PedidoRepository;
+import pro.fontoura.cursomc.repositories.ProdutoRepository;
 
 @SpringBootApplication
 public class CursomcApplication implements CommandLineRunner  {
@@ -37,6 +44,11 @@ public class CursomcApplication implements CommandLineRunner  {
 	private PedidoRepository pedidoRepositor;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	@Autowired
+	private ProdutoRepository produtoRepository;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
+	
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -78,6 +90,25 @@ public class CursomcApplication implements CommandLineRunner  {
 		pedidoRepositor.saveAll(Arrays.asList(ped1, ped2));
 		
 		pagamentoRepository.saveAll(Arrays.asList(pag1, pag2));
+		
+		Optional<Produto> p1 = produtoRepository.findById(1);
+		Optional<Produto> p2 = produtoRepository.findById(2);
+		Optional<Produto> p3 = produtoRepository.findById(3);
+		
+		ItemPedido ip1 = new ItemPedido(p1.get(), ped1, 1, 2000.00, (double) 0);
+		ItemPedido ip2 = new ItemPedido(p3.get(), ped1, 1, 80.00, (double) 0);
+		
+		ItemPedido ip3 = new ItemPedido(p2.get(), ped2, 1, 800.0, 100.0);
+		
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().add(ip3);
+		
+		p1.get().setItens(new HashSet<>(Arrays.asList(ip1)));
+		p2.get().setItens(new HashSet<>(Arrays.asList(ip3)));
+		p3.get().setItens(new HashSet<>(Arrays.asList(ip2)));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 		
 	}
 }
