@@ -44,6 +44,10 @@ public class Cliente implements Serializable {
 	@JoinTable(name = "telefone")
 	private Set<String> telefone = new HashSet<String>();
 
+	@JsonManagedReference
+	@OneToMany(mappedBy = "cliente")
+	private List<Pedido> pedidos = new ArrayList<Pedido>();
+
 	public Cliente() {
 
 	}
@@ -153,6 +157,20 @@ public class Cliente implements Serializable {
 	 */
 	public void setTelefone(Set<String> telefone) {
 		this.telefone = telefone;
+	}
+
+	/**
+	 * @return the pedidos
+	 */
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+
+	/**
+	 * @param pedidos the pedidos to set
+	 */
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
 	}
 
 	/*
