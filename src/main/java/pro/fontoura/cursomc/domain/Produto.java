@@ -16,17 +16,17 @@ import javax.persistence.ManyToMany;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-public class Produto implements Serializable{
+public class Produto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	@Column(length = 80, unique = true, nullable = false)
 	private String nome;
-	@Column(precision=2, scale=2)
+	@Column(precision = 2, scale = 2)
 	private Double preco;
-	
+
 	@JsonBackReference
 	@ManyToMany
 	@JoinTable(name="produto_categoria", 
@@ -34,11 +34,9 @@ public class Produto implements Serializable{
 		inverseJoinColumns = @JoinColumn(name="categoria_id")
 	)
 	private List<Categoria> categorias = new ArrayList<Categoria>();
-	
-	
+
 	public Produto() {
 	}
-
 
 	/**
 	 * @param id
@@ -52,14 +50,12 @@ public class Produto implements Serializable{
 		this.preco = preco;
 	}
 
-
 	/**
 	 * @return the id
 	 */
 	public Integer getId() {
 		return id;
 	}
-
 
 	/**
 	 * @param id the id to set
@@ -68,14 +64,12 @@ public class Produto implements Serializable{
 		this.id = id;
 	}
 
-
 	/**
 	 * @return the nome
 	 */
 	public String getNome() {
 		return nome;
 	}
-
 
 	/**
 	 * @param nome the nome to set
@@ -84,14 +78,12 @@ public class Produto implements Serializable{
 		this.nome = nome;
 	}
 
-
 	/**
 	 * @return the preco
 	 */
 	public Double getPreco() {
 		return preco;
 	}
-
 
 	/**
 	 * @param preco the preco to set
@@ -100,14 +92,12 @@ public class Produto implements Serializable{
 		this.preco = preco;
 	}
 
-
 	/**
 	 * @return the categorias
 	 */
 	public List<Categoria> getCategorias() {
 		return categorias;
 	}
-
 
 	/**
 	 * @param categorias the categorias to set
@@ -116,8 +106,9 @@ public class Produto implements Serializable{
 		this.categorias = categorias;
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -128,8 +119,9 @@ public class Produto implements Serializable{
 		return result;
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -148,6 +140,5 @@ public class Produto implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
+
 }
