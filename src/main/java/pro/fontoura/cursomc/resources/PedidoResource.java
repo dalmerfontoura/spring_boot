@@ -12,15 +12,15 @@ import pro.fontoura.cursomc.services.PedidoService;
 
 @RestController
 @RequestMapping(value="/pedidos")
-public class PedidoResource {
+public class PedidoResource extends ResourceDefault {
 
 	@Autowired
 	private PedidoService service;
 	
 	@RequestMapping(method = RequestMethod.GET, value="/{id}")
-	public ResponseEntity<?> buscar(@PathVariable Integer id) {
+	public ResponseEntity<?> find(@PathVariable Integer id) {
 		
-		Pedido obj = service.busca(id);
+		Pedido obj = service.find(id);
 		
 		return ResponseEntity.ok().body(obj);
 		

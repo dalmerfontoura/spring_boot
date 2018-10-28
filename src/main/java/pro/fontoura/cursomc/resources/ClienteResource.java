@@ -12,15 +12,15 @@ import pro.fontoura.cursomc.services.ClienteService;
 
 @RestController
 @RequestMapping(value="/clientes")
-public class ClienteResource {
+public class ClienteResource extends ResourceDefault {
 
 	@Autowired
 	private ClienteService service;
 	
 	@RequestMapping(method = RequestMethod.GET, value="/{id}")
-	public ResponseEntity<?> buscar(@PathVariable Integer id) {
+	public ResponseEntity<?> find(@PathVariable Integer id) {
 		
-		Cliente obj = service.busca(id);
+		Cliente obj = service.find(id);
 		
 		return ResponseEntity.ok().body(obj);
 		
