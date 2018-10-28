@@ -19,7 +19,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Pedido implements Serializable {
@@ -35,11 +34,9 @@ public class Pedido implements Serializable {
 	@Column(nullable = false)
 	private Date instante;
 
-	@JsonManagedReference
 	@OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
 	private Pagamento pagamento;
 
-	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
@@ -48,7 +45,6 @@ public class Pedido implements Serializable {
 	@JoinColumn(name = "endereco_id")
 	private Endereco enderecoDeEntrega;
 
-	@JsonManagedReference
 	@OneToMany(mappedBy = "id.pedido")
 	private Set<ItemPedido> itens = new HashSet<>();
 

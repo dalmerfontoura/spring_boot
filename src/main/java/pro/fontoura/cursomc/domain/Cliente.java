@@ -15,8 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import pro.fontoura.cursomc.domain.enuns.TipoPessoa;
 
@@ -37,7 +36,6 @@ public class Cliente implements Serializable {
 	@Column
 	private Integer tipo;
 
-	@JsonManagedReference
 	@OneToMany(mappedBy = "cliente")
 	private List<Endereco> enderecos = new ArrayList<Endereco>();
 
@@ -45,7 +43,7 @@ public class Cliente implements Serializable {
 	@JoinTable(name = "telefone")
 	private Set<String> telefone = new HashSet<String>();
 
-	@JsonBackReference
+	@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
 	private List<Pedido> pedidos = new ArrayList<Pedido>();
 
