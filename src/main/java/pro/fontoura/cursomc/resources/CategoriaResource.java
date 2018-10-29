@@ -1,6 +1,8 @@
 package pro.fontoura.cursomc.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import pro.fontoura.cursomc.domain.Categoria;
+import pro.fontoura.cursomc.dto.CategoriaDTO;
 import pro.fontoura.cursomc.services.CategoriaService;
 
 @RestController
@@ -20,12 +23,30 @@ public class CategoriaResource extends ResourceDefault {
 	@Autowired
 	private CategoriaService service;
 
+	/**
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<Categoria> find(@PathVariable Integer id) {
 
 		Categoria obj = service.find(id);
 
 		return ResponseEntity.ok().body(obj);
+
+	}
+	
+	/**
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<CategoriaDTO>> findAll() {
+
+		List<Categoria> categorias = service.findAll();
+		
+		List<CategoriaDTO> categoriaDTOs = categorias.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+
+		return ResponseEntity.ok().body(categoriaDTOs);
 
 	}
 
