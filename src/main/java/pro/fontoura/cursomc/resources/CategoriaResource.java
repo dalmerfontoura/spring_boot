@@ -22,7 +22,7 @@ import pro.fontoura.cursomc.services.CategoriaService;
 
 @RestController
 @RequestMapping(value = "/categorias")
-public class CategoriaResource extends ResourceDefault implements CRUDInterface<Categoria, CategoriaDTO> {
+public class CategoriaResource extends ResourceDefault implements ResourceInterface<Categoria, CategoriaDTO> {
 
 	@Autowired
 	private CategoriaService service;

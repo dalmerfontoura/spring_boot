@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
-public interface CRUDInterface<T, T1> {
+public interface ResourceInterface<T, T1> {
 
 	/**
 	 * @param id
