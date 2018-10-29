@@ -22,15 +22,15 @@ import pro.fontoura.cursomc.services.CategoriaService;
 
 @RestController
 @RequestMapping(value = "/categorias")
-public class CategoriaResource extends ResourceDefault {
+public class CategoriaResource extends ResourceDefault implements CRUDInterface<Categoria, CategoriaDTO> {
 
 	@Autowired
 	private CategoriaService service;
 
-	/**
-	 * @param id
-	 * @return
+	/* (non-Javadoc)
+	 * @see pro.fontoura.cursomc.resources.CRUDInterface#find(java.lang.Integer)
 	 */
+	@Override
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<Categoria> find(@PathVariable Integer id) {
 
@@ -40,9 +40,10 @@ public class CategoriaResource extends ResourceDefault {
 
 	}
 
-	/**
-	 * @return
+	/* (non-Javadoc)
+	 * @see pro.fontoura.cursomc.resources.CRUDInterface#findAll()
 	 */
+	@Override
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> findAll() {
 
@@ -55,9 +56,10 @@ public class CategoriaResource extends ResourceDefault {
 
 	}
 
-	/**
-	 * @return
+	/* (non-Javadoc)
+	 * @see pro.fontoura.cursomc.resources.CRUDInterface#findPage(int, int, java.lang.String, java.lang.String)
 	 */
+	@Override
 	@RequestMapping(method = RequestMethod.GET, value = "/page")
 	public ResponseEntity<Page<CategoriaDTO>> findPage(
 			@RequestParam(name= "page", defaultValue = "0") int page, 
@@ -73,14 +75,22 @@ public class CategoriaResource extends ResourceDefault {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see pro.fontoura.cursomc.resources.CRUDInterface#insert(pro.fontoura.cursomc.dto.CategoriaDTO)
+	 */
+	@Override
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO objDto) {
 		Categoria obj = service.fromDTO(objDto);
 		obj = service.insert(obj);
-		URI uri = retornarURI(obj);
+		URI uri = retornarURI(obj.getId());
 		return ResponseEntity.created(uri).build();
 	}
 
+	/* (non-Javadoc)
+	 * @see pro.fontoura.cursomc.resources.CRUDInterface#update(pro.fontoura.cursomc.dto.CategoriaDTO, java.lang.Integer)
+	 */
+	@Override
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id) {
 		Categoria obj = service.fromDTO(objDto);
@@ -89,6 +99,10 @@ public class CategoriaResource extends ResourceDefault {
 		return ResponseEntity.noContent().build();
 	}
 
+	/* (non-Javadoc)
+	 * @see pro.fontoura.cursomc.resources.CRUDInterface#delete(java.lang.Integer)
+	 */
+	@Override
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<Categoria> delete(@PathVariable Integer id) {
 

@@ -17,11 +17,17 @@ import pro.fontoura.cursomc.services.exceptions.DataIntegrityException;
 import pro.fontoura.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
-public class CategoriaService {
+public class CategoriaService implements ServiceInterface<Categoria, CategoriaDTO> {
 
 	@Autowired
 	private CategoriaRepository repository;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see pro.fontoura.cursomc.services.ServiceInterface#find(java.lang.Integer)
+	 */
+	@Override
 	public Categoria find(Integer id) {
 		Optional<Categoria> obj = repository.findById(id);
 
@@ -29,16 +35,36 @@ public class CategoriaService {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * pro.fontoura.cursomc.services.ServiceInterface#insert(pro.fontoura.cursomc.domain.Categoria)
+	 */
+	@Override
 	public Categoria insert(Categoria obj) {
 		obj.setId(null);
 		return repository.save(obj);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * pro.fontoura.cursomc.services.ServiceInterface#update(pro.fontoura.cursomc.domain.Categoria)
+	 */
+	@Override
 	public Categoria update(Categoria obj) {
 		find(obj.getId());
 		return repository.save(obj);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see pro.fontoura.cursomc.services.ServiceInterface#delete(java.lang.Integer)
+	 */
+	@Override
 	public void delete(Integer id) {
 		find(id);
 		try {
@@ -48,18 +74,37 @@ public class CategoriaService {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see pro.fontoura.cursomc.services.ServiceInterface#findAll()
+	 */
+	@Override
 	public List<Categoria> findAll() {
 		return repository.findAll();
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see pro.fontoura.cursomc.services.ServiceInterface#findToPages(int, int, java.lang.String, java.lang.String)
+	 */
+	@Override
 	public Page<Categoria> findToPages(int page, int linesPerPages, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPages, Direction.valueOf(direction), orderBy);
-		
+
 		return repository.findAll(pageRequest);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * pro.fontoura.cursomc.services.ServiceInterface#fromDTO(pro.fontoura.cursomc.dto.CategoriaDTO)
+	 */
+	@Override
 	public Categoria fromDTO(CategoriaDTO objDto) {
-		Categoria obj = new  Categoria(objDto.getId(), objDto.getNome());
+		Categoria obj = new Categoria(objDto.getId(), objDto.getNome());
 		return obj;
 	}
 }
