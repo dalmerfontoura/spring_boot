@@ -18,16 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import pro.fontoura.cursomc.domain.Cliente;
 import pro.fontoura.cursomc.dto.ClienteDTO;
+import pro.fontoura.cursomc.dto.ClienteNewDTO;
 import pro.fontoura.cursomc.services.ClienteService;
 
 @RestController
 @RequestMapping(value="/clientes")
-public class ClienteResource extends ResourceDefault implements ResourceInterface<Cliente, ClienteDTO> {
+public class ClienteResource extends ResourceDefault  {
 
 	@Autowired
 	private ClienteService service;
 	
-	@Override
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<Cliente> find(@PathVariable Integer id) {
 		Cliente obj = service.find(id);
@@ -36,7 +36,6 @@ public class ClienteResource extends ResourceDefault implements ResourceInterfac
 		
 	}
 
-	@Override
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<ClienteDTO>> findAll() {
 		List<Cliente> clientes = service.findAll();
@@ -45,7 +44,6 @@ public class ClienteResource extends ResourceDefault implements ResourceInterfac
 		return ResponseEntity.ok().body(clienteDTOs);
 	}
 
-	@Override
 	@RequestMapping(method = RequestMethod.GET, value = "/page")
 	public ResponseEntity<Page<ClienteDTO>> findPage(
 			@RequestParam(name= "page", defaultValue = "0") int page, 
@@ -60,16 +58,14 @@ public class ClienteResource extends ResourceDefault implements ResourceInterfac
 		return ResponseEntity.ok().body(clienteDTOs);
 	}
 
-	@Override
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(ClienteDTO objDto) {
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto) {
 		Cliente obj = service.fromDTO(objDto);
 		obj = service.insert(obj);
 		URI uri = retornarURI(obj.getId());
 		return ResponseEntity.created(uri).build();
 	}
 
-	@Override
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO objDto, @PathVariable Integer id) {
 		Cliente obj = service.fromDTO(objDto);
@@ -78,7 +74,6 @@ public class ClienteResource extends ResourceDefault implements ResourceInterfac
 		return ResponseEntity.noContent().build();
 	}
 
-	@Override
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<Cliente> delete(@PathVariable Integer id) {
 		service.delete(id);

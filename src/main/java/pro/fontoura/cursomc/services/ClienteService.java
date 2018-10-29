@@ -9,10 +9,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import pro.fontoura.cursomc.domain.Cidade;
 import pro.fontoura.cursomc.domain.Cliente;
+import pro.fontoura.cursomc.domain.Endereco;
+import pro.fontoura.cursomc.domain.enuns.TipoPessoa;
 import pro.fontoura.cursomc.dto.ClienteDTO;
+import pro.fontoura.cursomc.dto.ClienteNewDTO;
 import pro.fontoura.cursomc.repositories.ClienteRepository;
+import pro.fontoura.cursomc.repositories.EnderecoRepository;
 import pro.fontoura.cursomc.services.exceptions.DataIntegrityException;
 import pro.fontoura.cursomc.services.exceptions.ObjectNotFoundException;
 
@@ -20,7 +26,10 @@ import pro.fontoura.cursomc.services.exceptions.ObjectNotFoundException;
 public class ClienteService implements ServiceInterface<Cliente, ClienteDTO> {
 	@Autowired
 	private ClienteRepository repository;
-
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
+	
 	public Cliente find(Integer id) {
 		Optional<Cliente> obj = repository.findById(id);
 
@@ -35,9 +44,13 @@ public class ClienteService implements ServiceInterface<Cliente, ClienteDTO> {
 	 * pro.fontoura.cursomc.services.ServiceInterface#insert(pro.fontoura.cursomc.domain.Cliente)
 	 */
 	@Override
+	@Transactional
 	public Cliente insert(Cliente obj) {
 		obj.setId(null);
-		return repository.save(obj);
+		repository.save(obj);
+		enderecoRepository.saveAll(obj.getEnderecos());
+		
+		return obj;
 	}
 
 	/*
@@ -100,6 +113,21 @@ public class ClienteService implements ServiceInterface<Cliente, ClienteDTO> {
 	public Cliente fromDTO(ClienteDTO objDto) {
 		Cliente obj = new Cliente(objDto.getId(), objDto.getNome(), objDto.getEmail(), null, null);
 		return obj;
+	}
+
+	public Cliente fromDTO(ClienteNewDTO objDto) {
+		Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(), TipoPessoa.toEnum(objDto.getTipo()));
+		Cidade cid = new Cidade(objDto.getCidadeId(), null);
+		Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
+		cli.getEnderecos().add(end);
+		cli.getTelefone().add(objDto.getTelefone1());
+		if(objDto.getTelefone2() != null)
+			cli.getTelefone().add(objDto.getTelefone2());
+		if(objDto.getTelefone3() != null)
+			cli.getTelefone().add(objDto.getTelefone3());
+		
+		
+		return cli;
 	}
 	
 	private void updateData(Cliente newObj, Cliente obj) {
