@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import pro.fontoura.cursomc.domain.Categoria;
@@ -35,7 +37,7 @@ public class CategoriaResource extends ResourceDefault {
 		return ResponseEntity.ok().body(obj);
 
 	}
-	
+
 	/**
 	 * @return
 	 */
@@ -43,8 +45,27 @@ public class CategoriaResource extends ResourceDefault {
 	public ResponseEntity<List<CategoriaDTO>> findAll() {
 
 		List<Categoria> categorias = service.findAll();
-		
-		List<CategoriaDTO> categoriaDTOs = categorias.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+
+		List<CategoriaDTO> categoriaDTOs = categorias.stream().map(obj -> new CategoriaDTO(obj))
+				.collect(Collectors.toList());
+
+		return ResponseEntity.ok().body(categoriaDTOs);
+
+	}
+
+	/**
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/page")
+	public ResponseEntity<Page<CategoriaDTO>> findPage(
+			@RequestParam(name= "page", defaultValue = "0") int page, 
+			@RequestParam(name= "linesPerPages", defaultValue = "24") int linesPerPages, 
+			@RequestParam(name= "orderBy", defaultValue = "nome") String orderBy,
+			@RequestParam(name= "direction", defaultValue = "ASC") String direction) {
+
+		Page<Categoria> categorias = service.findToPages(page, linesPerPages, orderBy, direction);
+
+		Page<CategoriaDTO> categoriaDTOs = categorias.map(obj -> new CategoriaDTO(obj));
 
 		return ResponseEntity.ok().body(categoriaDTOs);
 
@@ -56,14 +77,14 @@ public class CategoriaResource extends ResourceDefault {
 		URI uri = retornarURI(obj);
 		return ResponseEntity.created(uri).build();
 	}
-	
+
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id) {
 		obj.setId(id);
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<Categoria> delete(@PathVariable Integer id) {
 

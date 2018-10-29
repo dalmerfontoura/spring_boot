@@ -1,5 +1,10 @@
 insert into categoria(nome) values('Informática')
 insert into categoria(nome) values('Escritório')
+insert into categoria(nome) values('Cama, Mesa e Banho')
+insert into categoria(nome) values('Eletronicos')
+insert into categoria(nome) values('Jardinagem')
+insert into categoria(nome) values('Decoração')
+insert into categoria(nome) values('Perfumaria')
 
 INSERT INTO PRODUTO (NOME, PRECO) VALUES ('Computador', 2000)
 INSERT INTO PRODUTO (NOME, PRECO) VALUES ('Impressora', 800)
