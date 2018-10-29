@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
-public interface ResourceInterface<T, T1> {
+public interface ResourceInterface<T, V> {
 
 	/**
 	 * @param id
@@ -16,16 +16,16 @@ public interface ResourceInterface<T, T1> {
 	/**
 	 * @return
 	 */
-	ResponseEntity<List<T1>> findAll();
+	ResponseEntity<List<V>> findAll();
 
 	/**
 	 * @return
 	 */
-	ResponseEntity<Page<T1>> findPage(int page, int linesPerPages, String orderBy, String direction);
+	ResponseEntity<Page<V>> findPage(int page, int linesPerPages, String orderBy, String direction);
 
-	ResponseEntity<Void> insert(T1 objDto);
+	ResponseEntity<Void> insert(V objDto);
 
-	ResponseEntity<Void> update(T1 objDto, Integer id);
+	ResponseEntity<Void> update(V objDto, Integer id);
 
 	ResponseEntity<T> delete(Integer id);
 
