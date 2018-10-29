@@ -23,7 +23,7 @@ import pro.fontoura.cursomc.services.ClienteService;
 
 @RestController
 @RequestMapping(value="/clientes")
-public class ClienteResource extends ResourceDefault  {
+public class ClienteResource extends ResourceDefault implements ResourceInterface<Cliente, ClienteDTO> {
 
 	@Autowired
 	private ClienteService service;
@@ -56,6 +56,17 @@ public class ClienteResource extends ResourceDefault  {
 		Page<ClienteDTO> clienteDTOs = clientes.map(obj -> new ClienteDTO(obj));
 
 		return ResponseEntity.ok().body(clienteDTOs);
+	}
+	
+	@Override
+	@Deprecated
+	public ResponseEntity<Void> insert(ClienteDTO objDto) {
+		try {
+			throw new Exception("Metodo inutilizado");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null; 
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
