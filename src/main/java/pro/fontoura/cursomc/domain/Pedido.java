@@ -1,8 +1,13 @@
 package pro.fontoura.cursomc.domain;
 
 import java.io.Serializable;
+import java.text.FieldPosition;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -148,7 +153,7 @@ public class Pedido implements Serializable {
 	public void setItens(Set<ItemPedido> itens) {
 		this.itens = itens;
 	}
-	
+
 	/**
 	 * @return
 	 */
@@ -157,7 +162,7 @@ public class Pedido implements Serializable {
 		for (ItemPedido itemPedido : itens) {
 			soma += itemPedido.getSubTotal();
 		}
-		
+
 		return soma;
 	}
 
@@ -196,4 +201,26 @@ public class Pedido implements Serializable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY HH:MM");
+		StringBuilder builder = new StringBuilder();
+		builder.append("Número Pedido: ");
+		builder.append(getId());
+		builder.append(", Intante: ");
+		builder.append(sdf.format(getInstante()));
+		builder.append(", Cliente: ");
+		builder.append(getCliente().getNome());
+		builder.append(", Situação do Pagamento: ");
+		builder.append(getPagamento().getEstado().getNome());
+		builder.append("\nDetalhes:\n");
+		for (ItemPedido itemPedido : itens) {
+			builder.append(itemPedido.toString());
+		}
+		builder.append("\nValor Total: ");
+		builder.append(nf.format(getValorTotal()));
+		
+		return builder.toString();
+	}
 }
