@@ -9,7 +9,6 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.devtools.restart.server.HttpRestartServerHandler;
 import org.springframework.web.servlet.HandlerMapping;
 
 import pro.fontoura.cursomc.domain.Cliente;
