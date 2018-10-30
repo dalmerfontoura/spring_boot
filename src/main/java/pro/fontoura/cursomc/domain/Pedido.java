@@ -1,9 +1,7 @@
 package pro.fontoura.cursomc.domain;
 
 import java.io.Serializable;
-import java.text.FieldPosition;
 import java.text.NumberFormat;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -208,7 +206,7 @@ public class Pedido implements Serializable {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Número Pedido: ");
 		builder.append(getId());
-		builder.append(", Intante: ");
+		builder.append(", Instante: ");
 		builder.append(sdf.format(getInstante()));
 		builder.append(", Cliente: ");
 		builder.append(getCliente().getNome());
