@@ -93,7 +93,7 @@ public class CursomcApplication implements CommandLineRunner {
 		Optional<Produto> p3 = produtoRepository.findById(3);
 
 		ItemPedido ip1 = new ItemPedido(p1.get(), ped1, 1, 2000.00, (double) 0);
-		ItemPedido ip2 = new ItemPedido(p3.get(), ped1, 1, 80.00, (double) 0);
+		ItemPedido ip2 = new ItemPedido(p3.get(), ped1, 2, 80.00, (double) 0);
 
 		ItemPedido ip3 = new ItemPedido(p2.get(), ped2, 1, 800.0, 100.0);
 

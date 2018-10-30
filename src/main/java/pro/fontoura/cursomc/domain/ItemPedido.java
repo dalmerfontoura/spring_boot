@@ -41,6 +41,10 @@ public class ItemPedido implements Serializable {
 		this.preco = preco;
 		this.desconto = desconto;
 	}
+	
+	public double getSubTotal() {
+		return (preco - desconto) * quantidade;
+	}
 
 	/**
 	 * @return {@link Produto} Produto

@@ -148,6 +148,18 @@ public class Pedido implements Serializable {
 	public void setItens(Set<ItemPedido> itens) {
 		this.itens = itens;
 	}
+	
+	/**
+	 * @return
+	 */
+	public double getValorTotal() {
+		double soma = 0.0;
+		for (ItemPedido itemPedido : itens) {
+			soma += itemPedido.getSubTotal();
+		}
+		
+		return soma;
+	}
 
 	/*
 	 * (non-Javadoc)
