@@ -24,21 +24,20 @@ public class Cidade implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "estado_id")
 	private Estado estado;
-
-	/**
-	 * 
-	 */
+	
 	public Cidade() {
 	}
 
 	/**
-	 * @param id   Identificador
-	 * @param nome Nome da Cidade
+	 * @param id
+	 * @param nome
+	 * @param estado
 	 */
-	public Cidade(Integer id, String nome) {
+	public Cidade(Integer id, String nome, Estado estado) {
 		super();
 		this.id = id;
 		this.nome = nome;
+		this.estado = estado;
 	}
 
 	/**
