@@ -8,11 +8,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import pro.fontoura.cursomc.domain.enuns.EstadoPagamento;
 
 @Entity
 @DiscriminatorValue("BL")
+@JsonTypeName("pagamentoComBoleto")
 public class PagamentoComBoleto extends Pagamento {
 
 	private static final long serialVersionUID = 1L;

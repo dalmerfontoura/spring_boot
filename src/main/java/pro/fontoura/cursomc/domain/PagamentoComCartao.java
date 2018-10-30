@@ -4,10 +4,13 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import pro.fontoura.cursomc.domain.enuns.EstadoPagamento;
 
 @Entity
 @DiscriminatorValue("CC")
+@JsonTypeName("pagamentoComCartao")
 public class PagamentoComCartao extends Pagamento {
 
 	private static final long serialVersionUID = 1L;
