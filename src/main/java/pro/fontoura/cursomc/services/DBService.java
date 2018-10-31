@@ -20,6 +20,7 @@ import pro.fontoura.cursomc.domain.PagamentoComCartao;
 import pro.fontoura.cursomc.domain.Pedido;
 import pro.fontoura.cursomc.domain.Produto;
 import pro.fontoura.cursomc.domain.enuns.EstadoPagamento;
+import pro.fontoura.cursomc.domain.enuns.Perfil;
 import pro.fontoura.cursomc.domain.enuns.TipoPessoa;
 import pro.fontoura.cursomc.repositories.CategoriaRepository;
 import pro.fontoura.cursomc.repositories.CidadeRepository;
@@ -205,6 +206,7 @@ public class DBService {
 		cli1.getTelefone().addAll(Arrays.asList("27363323", "93838393"));
 		
 		Cliente cli2 = new Cliente(null, "Ana Costa", "dalmer@investimentoedivida.com.br", pE.encode("123456"), "31628382740", TipoPessoa.PESSOAFISICA);
+		cli2.addPerfil(Perfil.ADMIN);
 		cli2.getTelefone().addAll(Arrays.asList("93883321", "34252625"));
 		
 		Endereco e1 = new Endereco(null, "Rua Flores", 300, "Apto 303", "Jardim", "38220834", cli1, c1);

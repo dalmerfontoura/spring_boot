@@ -5,19 +5,22 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import pro.fontoura.cursomc.domain.enuns.Perfil;
 import pro.fontoura.cursomc.domain.enuns.TipoPessoa;
 
 @Entity
@@ -44,15 +47,19 @@ public class Cliente implements Serializable {
 	private List<Endereco> enderecos = new ArrayList<Endereco>();
 
 	@ElementCollection
-	@JoinTable(name = "telefone")
+	@CollectionTable(name = "telefone")
 	private Set<String> telefone = new HashSet<String>();
+	
+	@ElementCollection(fetch=FetchType.EAGER)
+	@CollectionTable(name = "perfis")
+	private Set<Integer> perfis = new HashSet<Integer>();
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
 	private List<Pedido> pedidos = new ArrayList<Pedido>();
 
 	public Cliente() {
-
+		addPerfil(Perfil.CLIENTE);
 	}
 
 	public Cliente(Integer id, String nome, String email, String senha, String cpfOuCnpj, TipoPessoa tipo) {
@@ -62,8 +69,9 @@ public class Cliente implements Serializable {
 		this.email = email;
 		this.senha = senha;
 		this.cpfOuCnpj = cpfOuCnpj;
-		if(tipo != null)
-		this.tipo = tipo.getId();
+		if (tipo != null)
+			this.tipo = tipo.getId();
+		addPerfil(Perfil.CLIENTE);
 	}
 
 	/**
@@ -176,6 +184,14 @@ public class Cliente implements Serializable {
 	 */
 	public void setTelefone(Set<String> telefone) {
 		this.telefone = telefone;
+	}
+	
+	public Set<Perfil> getPerfis(){
+		return perfis.stream().map(p -> Perfil.toEnum(p)).collect(Collectors.toSet());
+	}
+	
+	public void addPerfil(Perfil perfil) {
+		this.perfis.add(perfil.getId());
 	}
 
 	/**
