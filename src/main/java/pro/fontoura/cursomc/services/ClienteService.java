@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import pro.fontoura.cursomc.domain.Cidade;
 import pro.fontoura.cursomc.domain.Cliente;
 import pro.fontoura.cursomc.domain.Endereco;
+import pro.fontoura.cursomc.domain.enuns.Perfil;
 import pro.fontoura.cursomc.domain.enuns.TipoPessoa;
 import pro.fontoura.cursomc.dto.ClienteDTO;
 import pro.fontoura.cursomc.dto.ClienteNewDTO;
 import pro.fontoura.cursomc.repositories.ClienteRepository;
 import pro.fontoura.cursomc.repositories.EnderecoRepository;
+import pro.fontoura.cursomc.security.UserSpringSecurity;
+import pro.fontoura.cursomc.services.exceptions.AuthorizationException;
 import pro.fontoura.cursomc.services.exceptions.DataIntegrityException;
 import pro.fontoura.cursomc.services.exceptions.ObjectNotFoundException;
 
@@ -35,6 +38,12 @@ public class ClienteService implements ServiceInterface<Cliente, ClienteDTO> {
 	private BCryptPasswordEncoder pE;
 	
 	public Cliente find(Integer id) {
+		
+		UserSpringSecurity UserSecurity = UserService.authenticated();
+		if(UserSecurity == null || !UserSecurity.hasRole(Perfil.ADMIN) && !id.equals(UserSecurity.getId( ))) {
+			throw new AuthorizationException("Acesso Negado!");
+		}
+		
 		Optional<Cliente> obj = repository.findById(id);
 
 		return obj.orElseThrow(() -> new ObjectNotFoundException( id, Cliente.class.getName()));
