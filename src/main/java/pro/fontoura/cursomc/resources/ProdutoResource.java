@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -108,6 +109,7 @@ public class ProdutoResource extends ResourceDefault implements ResourceInterfac
 	 * dto.ProdutoDTO)
 	 */
 	@Override
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody ProdutoDTO objDto) {
 		Produto obj = service.fromDTO(objDto);
@@ -124,6 +126,7 @@ public class ProdutoResource extends ResourceDefault implements ResourceInterfac
 	 * dto.ProdutoDTO, java.lang.Integer)
 	 */
 	@Override
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	public ResponseEntity<Void> update(@Valid @RequestBody ProdutoDTO objDto, @PathVariable Integer id) {
 		Produto obj = service.fromDTO(objDto);
@@ -139,6 +142,7 @@ public class ProdutoResource extends ResourceDefault implements ResourceInterfac
 	 * pro.fontoura.cursomc.resources.ResourceInterface#delete(java.lang.Integer)
 	 */
 	@Override
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<Produto> delete(@PathVariable Integer id) {
 

@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,20 +23,20 @@ import pro.fontoura.cursomc.dto.ClienteNewDTO;
 import pro.fontoura.cursomc.services.ClienteService;
 
 @RestController
-@RequestMapping(value="/clientes")
+@RequestMapping(value = "/clientes")
 public class ClienteResource extends ResourceDefault implements ResourceInterface<Cliente, ClienteDTO> {
 
 	@Autowired
 	private ClienteService service;
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<Cliente> find(@PathVariable Integer id) {
 		Cliente obj = service.find(id);
-	
-		return ResponseEntity.ok().body(obj);
-		
-	}
 
+		return ResponseEntity.ok().body(obj);
+
+	}
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<ClienteDTO>> findAll() {
 		List<Cliente> clientes = service.findAll();
@@ -44,12 +45,12 @@ public class ClienteResource extends ResourceDefault implements ResourceInterfac
 		return ResponseEntity.ok().body(clienteDTOs);
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET, value = "/page")
-	public ResponseEntity<Page<ClienteDTO>> findPage(
-			@RequestParam(name= "page", defaultValue = "0") int page, 
-			@RequestParam(name= "linesPerPages", defaultValue = "24") int linesPerPages, 
-			@RequestParam(name= "orderBy", defaultValue = "nome") String orderBy,
-			@RequestParam(name= "direction", defaultValue = "ASC") String direction) {
+	public ResponseEntity<Page<ClienteDTO>> findPage(@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "linesPerPages", defaultValue = "24") int linesPerPages,
+			@RequestParam(name = "orderBy", defaultValue = "nome") String orderBy,
+			@RequestParam(name = "direction", defaultValue = "ASC") String direction) {
 
 		Page<Cliente> clientes = service.findToPages(page, linesPerPages, orderBy, direction);
 
@@ -57,7 +58,7 @@ public class ClienteResource extends ResourceDefault implements ResourceInterfac
 
 		return ResponseEntity.ok().body(clienteDTOs);
 	}
-	
+
 	@Override
 	@Deprecated
 	public ResponseEntity<Void> insert(ClienteDTO objDto) {
@@ -66,7 +67,7 @@ public class ClienteResource extends ResourceDefault implements ResourceInterfac
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null; 
+		return null;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -85,6 +86,7 @@ public class ClienteResource extends ResourceDefault implements ResourceInterfac
 		return ResponseEntity.noContent().build();
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<Cliente> delete(@PathVariable Integer id) {
 		service.delete(id);
