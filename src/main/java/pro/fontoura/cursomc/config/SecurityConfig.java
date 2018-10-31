@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import pro.fontoura.cursomc.security.JWTAuthenticationFilter;
+import pro.fontoura.cursomc.security.JWTAuthorizationFilter;
 import pro.fontoura.cursomc.security.JWTUtil;
 
 @Configuration
@@ -41,8 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private static final String[] PUBLIC_MATCHERS_GET = {
 			"/categorias/**", 
 			"/clientes/**", 
-			"/produtos/**",
-			"/pedidos/**"
+			"/produtos/**"
 	};
 
 			
@@ -57,7 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
 		.antMatchers(PUBLIC_MATCHERS).permitAll()
 		.anyRequest().authenticated();
-		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil))
+		.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
 		// isso desativa a criação de sessão no Spring Security
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
