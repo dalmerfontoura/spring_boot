@@ -154,6 +154,16 @@ public class ClienteService implements ServiceInterface<Cliente, ClienteDTO> {
 	}
 	
 	public URI uploadProfilePicture(MultipartFile multipartFile) {
-		return s3Service.uploadFile(multipartFile);
+		UserSpringSecurity UserSecurity = UserService.authenticated();
+		if(UserSecurity == null) {
+			throw new AuthorizationException("Acesso Negado!");
+		}
+		
+		Optional<Cliente> cli = repository.findById(UserSecurity.getId());
+		
+		URI uri = s3Service.uploadFile(multipartFile);
+		cli.get().setImageURL(uri.toString());
+		repository.save(cli.get());
+		return uri;
 	}
 }
