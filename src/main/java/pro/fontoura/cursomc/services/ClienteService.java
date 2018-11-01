@@ -1,5 +1,6 @@
 package pro.fontoura.cursomc.services;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import pro.fontoura.cursomc.domain.Cidade;
 import pro.fontoura.cursomc.domain.Cliente;
@@ -35,7 +37,10 @@ public class ClienteService implements ServiceInterface<Cliente, ClienteDTO> {
 	private EnderecoRepository enderecoRepository;
 	
 	@Autowired
-	private BCryptPasswordEncoder pE;
+	private BCryptPasswordEncoder bCrypt;
+	
+	@Autowired
+	private S3Service s3Service;
 	
 	public Cliente find(Integer id) {
 		
@@ -129,7 +134,7 @@ public class ClienteService implements ServiceInterface<Cliente, ClienteDTO> {
 	}
 
 	public Cliente fromDTO(ClienteNewDTO objDto) {
-		Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), pE.encode(objDto.getSenha()), objDto.getCpfOuCnpj(), TipoPessoa.toEnum(objDto.getTipo()));
+		Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), bCrypt.encode(objDto.getSenha()), objDto.getCpfOuCnpj(), TipoPessoa.toEnum(objDto.getTipo()));
 		Cidade cid = new Cidade(objDto.getCidadeId(), null, null);
 		Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
 		cli.getEnderecos().add(end);
@@ -146,5 +151,9 @@ public class ClienteService implements ServiceInterface<Cliente, ClienteDTO> {
 	private void updateData(Cliente newObj, Cliente obj) {
 		newObj.setNome(obj.getNome());
 		newObj.setEmail(obj.getEmail());
+	}
+	
+	public URI uploadProfilePicture(MultipartFile multipartFile) {
+		return s3Service.uploadFile(multipartFile);
 	}
 }

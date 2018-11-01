@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import pro.fontoura.cursomc.domain.Cliente;
 import pro.fontoura.cursomc.dto.ClienteDTO;
@@ -92,5 +93,11 @@ public class ClienteResource extends ResourceDefault implements ResourceInterfac
 		service.delete(id);
 
 		return ResponseEntity.ok().build();
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/picture")
+	public ResponseEntity<Void> uploadProfilePicture(@RequestParam(name = "file") MultipartFile multipartFile) {
+		URI uri = service.uploadProfilePicture(multipartFile);
+		return ResponseEntity.created(uri).build();
 	}
 }
