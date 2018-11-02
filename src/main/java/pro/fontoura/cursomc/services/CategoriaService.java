@@ -17,7 +17,7 @@ import pro.fontoura.cursomc.services.exceptions.DataIntegrityException;
 import pro.fontoura.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
-public class CategoriaService implements ServiceInterface<Categoria, CategoriaDTO> {
+public class CategoriaService implements ServiceInterface<Categoria> {
 
 	@Autowired
 	private CategoriaRepository repository;
@@ -39,7 +39,8 @@ public class CategoriaService implements ServiceInterface<Categoria, CategoriaDT
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * pro.fontoura.cursomc.services.ServiceInterface#insert(pro.fontoura.cursomc.domain.Categoria)
+	 * pro.fontoura.cursomc.services.ServiceInterface#insert(pro.fontoura.cursomc.
+	 * domain.Categoria)
 	 */
 	@Override
 	public Categoria insert(Categoria obj) {
@@ -51,7 +52,8 @@ public class CategoriaService implements ServiceInterface<Categoria, CategoriaDT
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * pro.fontoura.cursomc.services.ServiceInterface#update(pro.fontoura.cursomc.domain.Categoria)
+	 * pro.fontoura.cursomc.services.ServiceInterface#update(pro.fontoura.cursomc.
+	 * domain.Categoria)
 	 */
 	@Override
 	public Categoria update(Categoria obj) {
@@ -87,7 +89,8 @@ public class CategoriaService implements ServiceInterface<Categoria, CategoriaDT
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see pro.fontoura.cursomc.services.ServiceInterface#findToPages(int, int, java.lang.String, java.lang.String)
+	 * @see pro.fontoura.cursomc.services.ServiceInterface#findToPages(int, int,
+	 * java.lang.String, java.lang.String)
 	 */
 	@Override
 	public Page<Categoria> findToPages(int page, int linesPerPages, String orderBy, String direction) {
@@ -96,13 +99,6 @@ public class CategoriaService implements ServiceInterface<Categoria, CategoriaDT
 		return repository.findAll(pageRequest);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * pro.fontoura.cursomc.services.ServiceInterface#fromDTO(pro.fontoura.cursomc.dto.CategoriaDTO)
-	 */
-	@Override
 	public Categoria fromDTO(CategoriaDTO objDto) {
 		Categoria obj = new Categoria(objDto.getId(), objDto.getNome());
 		return obj;

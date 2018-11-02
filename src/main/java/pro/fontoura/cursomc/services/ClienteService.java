@@ -31,7 +31,7 @@ import pro.fontoura.cursomc.services.exceptions.DataIntegrityException;
 import pro.fontoura.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
-public class ClienteService implements ServiceInterface<Cliente, ClienteDTO> {
+public class ClienteService implements ServiceInterface<Cliente> {
 	
 	@Value("${img.prefix.client.profile}")
 	private String prefix;
@@ -133,18 +133,19 @@ public class ClienteService implements ServiceInterface<Cliente, ClienteDTO> {
 		return repository.findAll(pageRequest);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * pro.fontoura.cursomc.services.ServiceInterface#fromDTO(pro.fontoura.cursomc.dto.ClienteDTO)
+	/**
+	 * @param objDto
+	 * @return
 	 */
-	@Override
 	public Cliente fromDTO(ClienteDTO objDto) {
 		Cliente obj = new Cliente(objDto.getId(), objDto.getNome(), objDto.getEmail(), null, null, null);
 		return obj;
 	}
 
+	/**
+	 * @param objDto
+	 * @return
+	 */
 	public Cliente fromDTO(ClienteNewDTO objDto) {
 		Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), bCrypt.encode(objDto.getSenha()), objDto.getCpfOuCnpj(), TipoPessoa.toEnum(objDto.getTipo()));
 		Cidade cid = new Cidade(objDto.getCidadeId(), null, null);

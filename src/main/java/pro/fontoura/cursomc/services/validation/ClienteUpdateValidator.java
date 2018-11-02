@@ -28,6 +28,7 @@ public class ClienteUpdateValidator implements ConstraintValidator<ClienteUpdate
 	public void initialize(ClienteUpdate ann) {
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean isValid(ClienteDTO objDto, ConstraintValidatorContext context) {
 

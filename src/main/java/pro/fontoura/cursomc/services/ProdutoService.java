@@ -22,7 +22,7 @@ import pro.fontoura.cursomc.services.exceptions.DataIntegrityException;
 import pro.fontoura.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
-public class ProdutoService implements ServiceInterface<Produto, Produto> {
+public class ProdutoService implements ServiceInterface<Produto> {
 
 	@Autowired
 	private ProdutoRepository produtoRepo;
@@ -81,11 +81,6 @@ public class ProdutoService implements ServiceInterface<Produto, Produto> {
 	public Page<Produto> findToPages(int page, int linesPerPages, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPages, Direction.valueOf(direction), orderBy);
 		return produtoRepo.findAll(pageRequest);
-	}
-
-	@Override
-	public Produto fromDTO(Produto objDto) {
-		return null;
 	}
 
 	public Produto fromDTO(@Valid ProdutoDTO objDto) {

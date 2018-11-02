@@ -24,7 +24,7 @@ import pro.fontoura.cursomc.services.exceptions.AuthorizationException;
 import pro.fontoura.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
-public class PedidoService implements ServiceInterface<Pedido, Pedido> {
+public class PedidoService implements ServiceInterface<Pedido> {
 
 	@Autowired
 	private PedidoRepository repository;
@@ -112,11 +112,5 @@ public class PedidoService implements ServiceInterface<Pedido, Pedido> {
 	public void delete(Integer id) {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	@Override
-	public Pedido fromDTO(Pedido objDto) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
