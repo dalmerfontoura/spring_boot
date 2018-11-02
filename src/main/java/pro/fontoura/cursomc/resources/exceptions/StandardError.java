@@ -6,19 +6,32 @@ public class StandardError implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer status;
-	private String msg;
 	private Long timestamp;
+	private Integer status;
+	private String error;
+	private String message;
+	private String path;
+
+	public StandardError(Long timestamp, Integer status, String error, String message, String path) {
+		super();
+		this.timestamp = timestamp;
+		this.status = status;
+		this.error = error;
+		this.message = message;
+		this.path = path;
+	}
 
 	/**
-	 * @param status
-	 * @param msg
-	 * @param timestamp
+	 * @return the timestamp
 	 */
-	public StandardError(Integer status, String msg, Long timestamp) {
-		super();
-		this.status = status;
-		this.msg = msg;
+	public Long getTimestamp() {
+		return timestamp;
+	}
+
+	/**
+	 * @param timestamp the timestamp to set
+	 */
+	public void setTimestamp(Long timestamp) {
 		this.timestamp = timestamp;
 	}
 
@@ -37,31 +50,45 @@ public class StandardError implements Serializable {
 	}
 
 	/**
-	 * @return the msg
+	 * @return the error
 	 */
-	public String getMsg() {
-		return msg;
+	public String getError() {
+		return error;
 	}
 
 	/**
-	 * @param msg the msg to set
+	 * @param error the error to set
 	 */
-	public void setMsg(String msg) {
-		this.msg = msg;
+	public void setError(String error) {
+		this.error = error;
 	}
 
 	/**
-	 * @return the timestamp
+	 * @return the message
 	 */
-	public Long getTimestamp() {
-		return timestamp;
+	public String getMessage() {
+		return message;
 	}
 
 	/**
-	 * @param timestamp the timestamp to set
+	 * @param message the message to set
 	 */
-	public void setTimestamp(Long timestamp) {
-		this.timestamp = timestamp;
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	/**
+	 * @return the path
+	 */
+	public String getPath() {
+		return path;
+	}
+
+	/**
+	 * @param path the path to set
+	 */
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 }
