@@ -32,46 +32,82 @@ import pro.fontoura.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class ClienteService implements ServiceInterface<Cliente> {
-	
+
 	@Value("${img.prefix.client.profile}")
 	private String prefix;
-	
+
 	@Value("${img.profile.size}")
 	private int size;
-	
+
 	@Autowired
 	private ClienteRepository repository;
-	
+
 	@Autowired
 	private EnderecoRepository enderecoRepository;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder bCrypt;
-	
+
 	@Autowired
 	private S3Service s3Service;
-	
+
 	@Autowired
 	private ImageService imageService;
-	
+
 	public Cliente find(Integer id) {
-		
-		UserSpringSecurity UserSecurity = UserService.authenticated();
-		if(UserSecurity == null || !UserSecurity.hasRole(Perfil.ADMIN) && !id.equals(UserSecurity.getId( ))) {
+
+		UserSpringSecurity uss = UserService.authenticated();
+		if (uss == null || !uss.hasRole(Perfil.ADMIN) && !id.equals(uss.getId())) {
 			throw new AuthorizationException("Acesso Negado!");
 		}
-		
+
 		Optional<Cliente> obj = repository.findById(id);
 
-		return obj.orElseThrow(() -> new ObjectNotFoundException( id, Cliente.class.getName()));
+		return obj.orElseThrow(() -> new ObjectNotFoundException(id, Cliente.class.getName()));
 
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see pro.fontoura.cursomc.services.ServiceInterface#findAll()
+	 */
+	@Override
+	public List<Cliente> findAll() {
+		return repository.findAll();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see pro.fontoura.cursomc.services.ServiceInterface#findToPages(int, int,
+	 * java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Page<Cliente> findToPages(int page, int linesPerPages, String orderBy, String direction) {
+		PageRequest pageRequest = PageRequest.of(page, linesPerPages, Direction.valueOf(direction), orderBy);
+
+		return repository.findAll(pageRequest);
+	}
+
+	public Cliente findByEmail(String email) {
+		UserSpringSecurity uss = UserService.authenticated();
+		if (uss == null || !uss.hasRole(Perfil.ADMIN) && !email.equals(uss.getUsername())) {
+			throw new AuthorizationException("Acesso Negado!");
+		}
+		Cliente cli = repository.findByEmail(email);
+		if (cli == null) {
+			throw new ObjectNotFoundException("Objeto não encontrado! Id: " + uss.getId() + ", Tipo " + Cliente.class.getName());
+		}
+		return cli;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see
-	 * pro.fontoura.cursomc.services.ServiceInterface#insert(pro.fontoura.cursomc.domain.Cliente)
+	 * pro.fontoura.cursomc.services.ServiceInterface#insert(pro.fontoura.cursomc.
+	 * domain.Cliente)
 	 */
 	@Override
 	@Transactional
@@ -79,7 +115,7 @@ public class ClienteService implements ServiceInterface<Cliente> {
 		obj.setId(null);
 		repository.save(obj);
 		enderecoRepository.saveAll(obj.getEnderecos());
-		
+
 		return obj;
 	}
 
@@ -87,7 +123,8 @@ public class ClienteService implements ServiceInterface<Cliente> {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * pro.fontoura.cursomc.services.ServiceInterface#update(pro.fontoura.cursomc.domain.Cliente)
+	 * pro.fontoura.cursomc.services.ServiceInterface#update(pro.fontoura.cursomc.
+	 * domain.Cliente)
 	 */
 	@Override
 	public Cliente update(Cliente obj) {
@@ -111,28 +148,6 @@ public class ClienteService implements ServiceInterface<Cliente> {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see pro.fontoura.cursomc.services.ServiceInterface#findAll()
-	 */
-	@Override
-	public List<Cliente> findAll() {
-		return repository.findAll();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see pro.fontoura.cursomc.services.ServiceInterface#findToPages(int, int, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public Page<Cliente> findToPages(int page, int linesPerPages, String orderBy, String direction) {
-		PageRequest pageRequest = PageRequest.of(page, linesPerPages, Direction.valueOf(direction), orderBy);
-
-		return repository.findAll(pageRequest);
-	}
-
 	/**
 	 * @param objDto
 	 * @return
@@ -147,35 +162,36 @@ public class ClienteService implements ServiceInterface<Cliente> {
 	 * @return
 	 */
 	public Cliente fromDTO(ClienteNewDTO objDto) {
-		Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), bCrypt.encode(objDto.getSenha()), objDto.getCpfOuCnpj(), TipoPessoa.toEnum(objDto.getTipo()));
+		Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), bCrypt.encode(objDto.getSenha()),
+				objDto.getCpfOuCnpj(), TipoPessoa.toEnum(objDto.getTipo()));
 		Cidade cid = new Cidade(objDto.getCidadeId(), null, null);
-		Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
+		Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(),
+				objDto.getBairro(), objDto.getCep(), cli, cid);
 		cli.getEnderecos().add(end);
 		cli.getTelefone().add(objDto.getTelefone1());
-		if(objDto.getTelefone2() != null)
+		if (objDto.getTelefone2() != null)
 			cli.getTelefone().add(objDto.getTelefone2());
-		if(objDto.getTelefone3() != null)
+		if (objDto.getTelefone3() != null)
 			cli.getTelefone().add(objDto.getTelefone3());
-		
-		
+
 		return cli;
 	}
-	
+
 	private void updateData(Cliente newObj, Cliente obj) {
 		newObj.setNome(obj.getNome());
 		newObj.setEmail(obj.getEmail());
 	}
-	
+
 	public URI uploadProfilePicture(MultipartFile multipartFile) {
 		UserSpringSecurity UserSecurity = UserService.authenticated();
-		if(UserSecurity == null) {
+		if (UserSecurity == null) {
 			throw new AuthorizationException("Acesso Negado!");
 		}
-		
+
 		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
 		jpgImage = imageService.cropSquare(jpgImage);
 		jpgImage = imageService.resize(jpgImage, size);
-		
+
 		String fileName = prefix + UserSecurity.getId() + ".jpg";
 		return s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
 	}

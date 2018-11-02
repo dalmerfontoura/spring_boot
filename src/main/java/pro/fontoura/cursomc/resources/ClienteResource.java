@@ -35,8 +35,15 @@ public class ClienteResource extends ResourceDefault implements ResourceInterfac
 		Cliente obj = service.find(id);
 
 		return ResponseEntity.ok().body(obj);
-
 	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/email")
+	public ResponseEntity<Cliente> find(@RequestParam(value = "value") String email) {
+		Cliente obj = service.findByEmail(email);
+		
+		return ResponseEntity.ok().body(obj);
+	}
+
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<ClienteDTO>> findAll() {
