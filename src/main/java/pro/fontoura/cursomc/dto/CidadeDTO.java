@@ -4,33 +4,40 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotEmpty;
 
-import pro.fontoura.cursomc.domain.Produto;
+import pro.fontoura.cursomc.domain.Cidade;
 
-public class ProdutoDTO implements Serializable{
+public class CidadeDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Integer id;
 
 	@NotEmpty(message = "Preechimento Obrigatório")
 	private String nome;
 
-	private Double preco;
+	public CidadeDTO() {
 
-	public ProdutoDTO(Produto obj) {
-		this.id = obj.getId();
-		this.nome = obj.getNome();
-		this.preco = obj.getPreco();
 	}
-	
+
+	public CidadeDTO(Cidade cidade) {
+		this.id = cidade.getId();
+		this.nome = cidade.getNome();
+	}
+
+	/**
+	 * @return the id
+	 */
 	public Integer getId() {
 		return id;
 	}
-	
+
+	/**
+	 * @param id the id to set
+	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
 	/**
 	 * @return the nome
 	 */
@@ -44,19 +51,8 @@ public class ProdutoDTO implements Serializable{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	/**
-	 * @return the preco
-	 */
-	public Double getPreco() {
-		return preco;
-	}
-
-	/**
-	 * @param preco the preco to set
-	 */
-	public void setPreco(Double preco) {
-		this.preco = preco;
-	}
+	
+	
+	
 
 }
